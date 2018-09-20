@@ -43,7 +43,6 @@ var RequestSchema = `
     "message",
     "src_file",
     "src_line",
-    "context",
     "level",
     "time"
   ],

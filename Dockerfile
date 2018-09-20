@@ -1,13 +1,9 @@
-FROM golang:latest as builder
-
-RUN apt-get update && apt-get install -y --no-install-recommends upx
-
-# FROM golang:alpine as builder
-# RUN apk add --no-cache git build-base && \
-#     echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
-#     echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
-#     echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
-#     apk add --no-cache upx
+FROM golang:alpine as builder
+RUN apk add --no-cache git build-base && \
+    echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
+    echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
+    echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
+    apk add --no-cache upx
 
 ENV GO111MODULE=on
 WORKDIR /go/src/github.com/AlphaWong/log-entry
