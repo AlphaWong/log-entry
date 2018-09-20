@@ -22,5 +22,6 @@ RUN upx -7 -qq app && \
 
 FROM gcr.io/distroless/base
 COPY --from=builder /go/bin/app /
+COPY --from=builder /go/src/github.com/AlphaWong/log-entry/config/config.yaml /config/config.yaml
 ENTRYPOINT ["./app"]
 EXPOSE 80
