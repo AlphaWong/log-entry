@@ -68,8 +68,8 @@ var RequestSchema = `
         "locale",
         "location",
         "environment",
-        "platform",
-      ],
+        "platform"
+      ]
     },
     "level": {
       "type": "string",
