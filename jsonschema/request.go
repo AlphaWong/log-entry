@@ -18,7 +18,58 @@ var RequestSchema = `
       "pattern": "^\\d+$"
     },
     "context": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "release": {
+          "type": "string"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "string"
+        },
+        "lng": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "os": {
+          "type": "string"
+        },
+        "device": {
+          "type": "string"
+        },
+        "agent": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        },
+        "footprint": {
+          "type": "string"
+        },
+        "client-id": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "release",
+        "locale",
+        "location",
+        "environment",
+        "platform",
+      ],
     },
     "level": {
       "type": "string",
@@ -43,6 +94,7 @@ var RequestSchema = `
     "message",
     "src_file",
     "src_line",
+    "context",
     "level",
     "time"
   ],
