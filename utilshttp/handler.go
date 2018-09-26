@@ -18,6 +18,13 @@ import (
 	"go.uber.org/zap"
 )
 
+func RequestIdMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("X-Request-ID", utils.GetUuid())
+		next.ServeHTTP(w, r)
+	}
+}
+
 func AuthMidleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var a = r.Header.Get("Authorization")
@@ -40,6 +47,8 @@ func AuthMidleware(next http.HandlerFunc) http.HandlerFunc {
 
 func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
+		var dump, _ = httputil.DumpRequest(r, true)
+		lalamove.Logger().Error("Invalid http method", zap.String("request", string(dump)), zap.String("x-request-id", w.Header().Get("X-Request-ID")))
 		RenderError(w, http.StatusMethodNotAllowed, "")
 		return
 	}
@@ -51,8 +60,9 @@ func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LogHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("X-Request-ID", utils.GetUuid())
 	if r.Method != http.MethodPost {
+		var dump, _ = httputil.DumpRequest(r, true)
+		lalamove.Logger().Error("Invalid http method", zap.String("request", string(dump)), zap.String("x-request-id", w.Header().Get("X-Request-ID")))
 		RenderError(w, http.StatusMethodNotAllowed, "")
 		return
 	}
@@ -63,7 +73,7 @@ func LogHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err := jsonschema.IsValidRequest(bodyStr); err != nil {
 		var dump, _ = httputil.DumpRequest(r, true)
-		lalamove.Logger().Error("Cannot pass json schema", zap.String("request", string(dump)))
+		lalamove.Logger().Error("Cannot pass json schema", zap.String("request", string(dump)), zap.String("x-request-id", w.Header().Get("X-Request-ID")))
 		RenderError(w, http.StatusBadRequest, err.Error())
 		lalamove.Logger().Sync()
 		return
@@ -73,7 +83,7 @@ func LogHandler(w http.ResponseWriter, r *http.Request) {
 	var err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		var dump, _ = httputil.DumpRequest(r, true)
-		lalamove.Logger().Error("invalid request", zap.String("request", string(dump)))
+		lalamove.Logger().Error("invalid request", zap.String("request", string(dump)), zap.String("x-request-id", w.Header().Get("X-Request-ID")))
 		RenderError(w, http.StatusBadRequest, "")
 		lalamove.Logger().Sync()
 		return

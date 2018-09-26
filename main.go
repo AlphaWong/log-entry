@@ -20,9 +20,10 @@ func main() {
 	boot.ParseConfig()
 
 	jsonschema.Init()
-	http.HandleFunc("/", utilshttp.AuthMidleware(utilshttp.LogHandler))
-	http.HandleFunc("/health", utilshttp.HealthCheckHandler)
+	var mux = http.NewServeMux()
+	mux.HandleFunc("/", utilshttp.RequestIdMiddleware(utilshttp.AuthMidleware(utilshttp.LogHandler)))
+	mux.HandleFunc("/health", utilshttp.RequestIdMiddleware(utilshttp.HealthCheckHandler))
 
 	lalamove.Logger().Info("Server on at", zap.String("PORT", utils.Port))
-	log.Fatal(http.ListenAndServe(utils.Port, nil))
+	log.Fatal(http.ListenAndServe(utils.Port, mux))
 }

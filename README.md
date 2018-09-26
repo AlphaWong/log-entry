@@ -7,6 +7,11 @@ All the key will located at config/config.yaml
 pwgen -s -n 16 3
 ```
 
+# Testing
+Pre-requirement: https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+* success.http ( for success request )
+* fail.http ( for fail request )
+
 # Format
 ```
 {
